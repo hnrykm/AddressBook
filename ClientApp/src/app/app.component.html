@@ -1,0 +1,38 @@
+<div class="content">
+  <div class="header">
+    <h1>Employees</h1>
+    <button nz-button nzType="primary" aria-label="create" (click)="openCreateModal()">+ New</button>
+  </div>
+
+  <div class="table">
+    <nz-table #basicTable [nzData]="data">
+      <thead>
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Date of Birth</th>
+          <th>Address</th>
+          <th>City</th>
+          <th>State</th>
+          <th>Zip Code</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of data; index as i">
+          <td>{{ data.firstName }}</td>
+          <td>{{ data.lastName }}</td>
+          <td>{{ data.dob | date }}</td>
+          <td>{{ data.address?.line1 }}{{ data.address?.line2 && ', ' + data.address?.line2 }}</td>
+          <td>{{ data.address?.city }}</td>
+          <td>{{ data.address?.state }}</td>
+          <td>{{ data.address?.zipCode }}</td>
+          <td class="actions">
+            <button nz-button nzType="primary" nzShape="circle" aria-label="edit" (click)="openEditModal(i)"><i nz-icon nzType="edit" nzTheme="fill"></i></button>
+            <button nz-button nzType="primary" nzShape="circle" nzDanger aria-label="delete" (click)="delete(i)"><i nz-icon nzType="delete" nzTheme="fill"></i></button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>
