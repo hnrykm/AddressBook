@@ -1,56 +1,49 @@
-using Backend.Interview.Api.Models;
+using Backend.Interview.Api.ApplicationCore.Contracts;
+using Backend.Interview.Api.ApplicationCore.Models;
+using Backend.Interview.Api.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Interview.Api.Repositories;
-
-public interface IPersonRepository
-{
-    Task<List<Person>> GetAllPeopleAsync();
-    Task<Person> GetPersonByIdAsync(Guid id);
-    Task<Person> AddPersonAsync(Person person);
-    Task<Person> UpdatePersonAsync(Person person);
-    Task DeletePersonAsync(Guid id);
-}
+namespace Backend.Interview.Api.Infrastructure.Repository;
 
 public class PersonRepository : IPersonRepository
 {
     private readonly BackendInterviewDbContext _dbContext;
 
-    public PersonRepository(BackendInterviewDbContext _dbContext)
+    public PersonRepository(BackendInterviewDbContext dbContext)
     {
-        _dbContext = _dbContext;
+        _dbContext = dbContext;
     }
 
-    public async Task<List<Person>> GetAllPeopleAsync()
+    public async Task<IEnumerable<Person>> GetAllAsync()
     {
         return await _dbContext.People.ToListAsync();
     }
 
-    public async Task<Person> GetPersonByIdAsync(Guid id)
+    public async Task<Person> GetByIdAsync(Guid id)
     {
         return await _dbContext.People.FindAsync(id);
     }
 
-    public async Task<Person> AddPersonAsync(Person person)
+    public async Task<Person> AddAsync(Person person)
     {
-        _dbContext.People.Add(person);
+        await _dbContext.People.AddAsync(person);
         await _dbContext.SaveChangesAsync();
+        
         return person;
     }
 
-    public async Task<Person> UpdatePersonAsync(Person person)
+    public async Task<Person> UpdateAsync(Person person)
     {
-        _dbContext.Entry(person).State = EntityState.Modified;
+        _dbContext.People.Update(person);
         await _dbContext.SaveChangesAsync();
+        
         return person;
     }
 
-    public async Task DeletePersonAsync(Guid id)
+    public async Task DeleteAsync(Person person)
     {
-        var person = await _dbContext.People.FindAsync(id);
         _dbContext.Remove(person);
         await _dbContext.SaveChangesAsync();
-
     }
 
 }

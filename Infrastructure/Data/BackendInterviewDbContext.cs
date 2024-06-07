@@ -1,5 +1,7 @@
-using Backend.Interview.Api.Models;
+using Backend.Interview.Api.ApplicationCore.Models;
 using Microsoft.EntityFrameworkCore;
+
+namespace Backend.Interview.Api.Infrastructure.Data;
 
 public class BackendInterviewDbContext : DbContext
 {

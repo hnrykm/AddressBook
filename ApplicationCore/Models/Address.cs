@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Interview.Api.Models;
+namespace Backend.Interview.Api.ApplicationCore.Models;
 
 [Owned]
 public class Address

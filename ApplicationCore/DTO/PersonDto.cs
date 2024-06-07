@@ -1,10 +1,9 @@
-using System.ComponentModel.DataAnnotations;
+using Backend.Interview.Api.ApplicationCore.Models;
 
-namespace Backend.Interview.Api.Models;
+namespace Backend.Interview.Api.ApplicationCore.DTO;
 
-public class AddPersonRequest
+public class PersonDto
 {
-    [Key]
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public DateTime Dob { get; set; } // DateOfBirth instead of Dob?

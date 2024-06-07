@@ -1,99 +1,99 @@
-using Backend.Interview.Api.Models;
+using Backend.Interview.Api.ApplicationCore.Contracts;
+using Backend.Interview.Api.ApplicationCore.DTO;
+using Backend.Interview.Api.ApplicationCore.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Interview.Api.Controllers;
+namespace Backend.Interview.Api.ServerApp.Controllers;
 
 [ApiController]
 [Route("[controller]")]
 
 public class PeopleController : ControllerBase
 {
-    // private readonly IPersonService _personService;
-    private readonly BackendInterviewDbContext _dbContext;
+    private readonly IPersonService _personService;
 
-    public PeopleController(BackendInterviewDbContext dbContext)
+    public PeopleController(IPersonService personService)
     {
-        // _personService = personService;
-        _dbContext = dbContext;
+        _personService = personService;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllPeople()
+    public async Task<ActionResult<IEnumerable<Person>>> GetAllPeopleAsync()
     {
-        return Ok(await _dbContext.People.ToListAsync());
+        var people = await _personService.GetAllPeopleAsync();
+        return Ok(people);
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetPersonByIdAsync(Guid id)
+    public async Task<ActionResult<PersonDto>> GetPersonByIdAsync(Guid id)
     {
-        var person = await _dbContext.People.FindAsync(id);
-        if (person != null)
+        try
         {
+            var person = await _personService.GetPersonByIdAsync(id);
             return Ok(person);
         }
-
-        return NotFound();
+        catch (ArgumentException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, "Internal server error");        
+        }
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddPersonAsync(AddPersonRequest addPersonRequest)
+    public async Task<IActionResult> AddPersonAsync(PersonDto personDto)
     {
-        var person = new Person()
+        // Data validation
+        // return BadRequest();
+        try
         {
-            Id = Guid.NewGuid(),
-            FirstName = addPersonRequest.FirstName,
-            LastName = addPersonRequest.LastName,
-            Dob = addPersonRequest.Dob,
-            Address = new Address()
-            {
-                Line1 = addPersonRequest.Address.Line1,
-                Line2 = addPersonRequest.Address.Line2,
-                City = addPersonRequest.Address.City,
-                State = addPersonRequest.Address.State,
-                ZipCode = addPersonRequest.Address.ZipCode
-            }
-        };
-        await _dbContext.People.AddAsync(person);
-        await _dbContext.SaveChangesAsync();
+            var person = await _personService.AddPersonAsync(personDto);
+            // return CreatedAtAction(nameof(GetPersonByIdAsync), new { id = person.Id }, person);
+            return Ok(person);
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "Internal server error");
+        }
 
-        return Ok(person);
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdatePersonAsync(Guid id, UpdatePersonRequest updatePersonRequest)
+    public async Task<IActionResult> UpdatePersonAsync(Guid id, PersonDto personDto)
     {
-        var person = await _dbContext.People.FindAsync(id);
-        if (person != null)
+        try
         {
-            person.FirstName = updatePersonRequest.FirstName;
-            person.LastName = updatePersonRequest.LastName;
-            person.Dob = updatePersonRequest.Dob;
-            person.Address.Line1 = updatePersonRequest.Address.Line1;
-            person.Address.Line2 = updatePersonRequest.Address.Line2;
-            person.Address.City = updatePersonRequest.Address.City;
-            person.Address.State = updatePersonRequest.Address.State;
-            person.Address.ZipCode = updatePersonRequest.Address.ZipCode;
-            
-            await _dbContext.SaveChangesAsync();
+            var person = await _personService.UpdatePersonAsync(id, personDto);
             return Ok(person);
         }
-
-        return NotFound();
+        catch (ArgumentException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, "Internal server error");
+        }
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeletePersonAsync(Guid id)
     {
-        var person = await _dbContext.People.FindAsync(id);
-        if (person != null)
+        try
         {
-            _dbContext.Remove(person);
-            await _dbContext.SaveChangesAsync();
-            return Ok(person);
+            await _personService.DeletePersonAsync(id);
+            return NoContent();
         }
-
-        return NotFound();
+        catch (ArgumentException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, "Internal server error");
+        }
     }
     
     

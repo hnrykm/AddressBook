@@ -1,12 +1,6 @@
-using System;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System.Text.Json.Serialization;
 
-namespace Backend.Interview.Api.Models;
+namespace Backend.Interview.Api.ApplicationCore.Models;
 public class Person
 {
     [Key]

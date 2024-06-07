@@ -1,4 +1,7 @@
-using Backend.Interview.Api;
+using Backend.Interview.Api.ApplicationCore.Contracts;
+using Backend.Interview.Api.Infrastructure.Data;
+using Backend.Interview.Api.Infrastructure.Repository;
+using Backend.Interview.Api.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +21,8 @@ var connectionString = PostgresAzure.Replace("{username}", username)
 
 // Add services to the container.
 builder.Services.AddDbContext<BackendInterviewDbContext>(options => options.UseNpgsql(connectionString));
-
+builder.Services.AddScoped<IPersonService, PersonService>();
+builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

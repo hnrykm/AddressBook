@@ -37,9 +37,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="ApplicationCore\Contracts\Repository\" />
-      <Folder Include="ApplicationCore\Contracts\Services\" />
-      <Folder Include="ApplicationCore\Entities\" />
       <Folder Include="Infrastructure\" />
       <Folder Include="ServerApp\" />
     </ItemGroup>
