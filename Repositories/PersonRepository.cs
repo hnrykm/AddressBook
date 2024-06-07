@@ -23,7 +23,7 @@ public class PersonRepository : IPersonRepository
 
     public async Task<List<Person>> GetAllPeopleAsync()
     {
-        return await _dbContext.People.Where(person => !person.IsDeleted).ToListAsync();
+        return await _dbContext.People.ToListAsync();
     }
 
     public async Task<Person> GetPersonByIdAsync(Guid id)
@@ -48,11 +48,9 @@ public class PersonRepository : IPersonRepository
     public async Task DeletePersonAsync(Guid id)
     {
         var person = await _dbContext.People.FindAsync(id);
-        if (person != null)
-        {
-            person.IsDeleted = true;
-            await _dbContext.SaveChangesAsync();
-        }
+        _dbContext.Remove(person);
+        await _dbContext.SaveChangesAsync();
+
     }
 
 }

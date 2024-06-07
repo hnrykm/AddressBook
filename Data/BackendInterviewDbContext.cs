@@ -7,11 +7,10 @@ public class BackendInterviewDbContext : DbContext
     {
     }
 
-    public DbSet<Person> People { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Person>()
             .OwnsOne(person => person.Address);
     }
+    public DbSet<Person> People { get; set; }
 }
