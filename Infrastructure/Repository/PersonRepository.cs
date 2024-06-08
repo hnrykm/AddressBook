@@ -16,7 +16,7 @@ public class PersonRepository : IPersonRepository
 
     public async Task<IEnumerable<Person>> GetAllAsync()
     {
-        return await _dbContext.People.ToListAsync();
+        return await _dbContext.People.OrderBy(person => person.LastName).ToListAsync();
     }
 
     public async Task<Person> GetByIdAsync(Guid id)

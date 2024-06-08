@@ -6,6 +6,6 @@ public class PersonDto
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public DateTime Dob { get; set; } // DateOfBirth instead of Dob?
+    public DateOnly Dob { get; set; }
     public Address Address { get; set; }
 }

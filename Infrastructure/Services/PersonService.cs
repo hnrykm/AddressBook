@@ -13,22 +13,50 @@ public class PersonService : IPersonService
         _personRepository = personRepository;
     }
 
-    public async Task<IEnumerable<Person>> GetAllPeopleAsync()
+    public async Task<IEnumerable<PersonResponseDto>> GetAllPeopleAsync()
     {
         var people = await _personRepository.GetAllAsync();
-        // TO DO: Sorting Logic
-        return people;
+        var peopleDateOnly = people.Select(person => new PersonResponseDto
+        {
+            Id = person.Id,
+            FirstName = person.FirstName,
+            LastName = person.LastName,
+            Dob = DateOnly.FromDateTime(person.Dob),
+            Address = new Address
+            {
+                Line1 = person.Address.Line1,
+                Line2 = person.Address.Line2,
+                City = person.Address.City,
+                State = person.Address.State,
+                ZipCode = person.Address.ZipCode
+            }
+        });
+        return peopleDateOnly;
     }
 
-    public async Task<Person> GetPersonByIdAsync(Guid id)
+    public async Task<PersonResponseDto> GetPersonByIdAsync(Guid id)
     {
         var person = await _personRepository.GetByIdAsync(id);
-        // TO DO: Some sort of action
         if (person == null)
         {
             throw new ArgumentException("Person with ID was not found.");
         }
-        return person;
+
+        return new PersonResponseDto()
+        {
+            Id = person.Id,
+            FirstName = person.FirstName,
+            LastName = person.LastName,
+            Dob = DateOnly.FromDateTime(person.Dob),
+            Address = new Address
+            {
+                Line1 = person.Address.Line1,
+                Line2 = person.Address.Line2,
+                City = person.Address.City,
+                State = person.Address.State,
+                ZipCode = person.Address.ZipCode
+            }
+        };
     }
 
     public async Task<Person> AddPersonAsync(PersonDto personDto)
@@ -38,7 +66,7 @@ public class PersonService : IPersonService
             Id = Guid.NewGuid(),
             FirstName = personDto.FirstName,
             LastName = personDto.LastName,
-            Dob = personDto.Dob,
+            Dob = DateTime.SpecifyKind(personDto.Dob.ToDateTime(TimeOnly.MinValue).Date, DateTimeKind.Utc),
             Address = new Address()
             {
                 Line1 = personDto.Address.Line1,
@@ -68,7 +96,7 @@ public class PersonService : IPersonService
         
         person.FirstName = personDto.FirstName;
         person.LastName = personDto.LastName;
-        person.Dob = personDto.Dob;
+        person.Dob = DateTime.SpecifyKind(personDto.Dob.ToDateTime(TimeOnly.MinValue).Date, DateTimeKind.Utc);
         person.Address.Line1 = personDto.Address.Line1;
         person.Address.Line2 = personDto.Address.Line2;
         person.Address.City = personDto.Address.City;

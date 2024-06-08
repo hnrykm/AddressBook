@@ -18,7 +18,7 @@ public class PeopleController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Person>>> GetAllPeopleAsync()
+    public async Task<ActionResult<IEnumerable<PersonResponseDto>>> GetAllPeopleAsync()
     {
         var people = await _personService.GetAllPeopleAsync();
         return Ok(people);
