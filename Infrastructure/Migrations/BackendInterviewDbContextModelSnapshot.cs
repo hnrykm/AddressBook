@@ -22,53 +22,60 @@ namespace Backend.Interview.Api.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Backend.Interview.Api.Models.Person", b =>
+            modelBuilder.Entity("Backend.Interview.Api.ApplicationCore.Models.Person", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                    b.Property<string>("Id")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("Dob")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
 
                     b.HasKey("Id");
 
                     b.ToTable("People");
                 });
 
-            modelBuilder.Entity("Backend.Interview.Api.Models.Person", b =>
+            modelBuilder.Entity("Backend.Interview.Api.ApplicationCore.Models.Person", b =>
                 {
-                    b.OwnsOne("Backend.Interview.Api.Models.Address", "Address", b1 =>
+                    b.OwnsOne("Backend.Interview.Api.ApplicationCore.Models.Address", "Address", b1 =>
                         {
-                            b1.Property<Guid>("PersonId")
-                                .HasColumnType("uuid");
+                            b1.Property<string>("PersonId")
+                                .HasColumnType("character varying(50)");
 
                             b1.Property<string>("City")
                                 .IsRequired()
-                                .HasColumnType("text");
+                                .HasMaxLength(30)
+                                .HasColumnType("character varying(30)");
 
                             b1.Property<string>("Line1")
                                 .IsRequired()
-                                .HasColumnType("text");
+                                .HasMaxLength(50)
+                                .HasColumnType("character varying(50)");
 
                             b1.Property<string>("Line2")
-                                .HasColumnType("text");
+                                .HasMaxLength(50)
+                                .HasColumnType("character varying(50)");
 
                             b1.Property<string>("State")
                                 .IsRequired()
-                                .HasColumnType("text");
+                                .HasMaxLength(30)
+                                .HasColumnType("character varying(30)");
 
                             b1.Property<string>("ZipCode")
                                 .IsRequired()
-                                .HasColumnType("text");
+                                .HasMaxLength(10)
+                                .HasColumnType("character varying(10)");
 
                             b1.HasKey("PersonId");
 

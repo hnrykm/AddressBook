@@ -19,7 +19,7 @@ public class PersonRepository : IPersonRepository
         return await _dbContext.People.OrderBy(person => person.LastName).ToListAsync();
     }
 
-    public async Task<Person> GetByIdAsync(Guid id)
+    public async Task<Person> GetByIdAsync(string id)
     {
         var person = await _dbContext.People.FindAsync(id);
         if (person == null)

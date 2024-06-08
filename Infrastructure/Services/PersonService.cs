@@ -21,63 +21,65 @@ public class PersonService : IPersonService
         return peopleDateOnly;
     }
 
-    public async Task<PersonResponseDto> GetPersonByIdAsync(Guid id)
+    public async Task<PersonResponseDto> GetPersonByIdAsync(string id)
     {
         var person = await _personRepository.GetByIdAsync(id);
 
         return DateOnlyResponse(person);
     }
 
-    public async Task<PersonResponseDto> AddPersonAsync(PersonDto personDto)
+    public async Task<PersonResponseDto> AddPersonAsync(Person person)
     {
-        int age = CalculateAge(personDto.Dob);
+        int age = CalculateAge(person.Dob);
         if (age < 0 || age > 150)
         {
             throw new ValidationException("Age must be between 0 and 150.");
         }
-        var person = new Person()
+        var createdPerson = new Person()
         {
-            Id = Guid.NewGuid(),
-            FirstName = personDto.FirstName,
-            LastName = personDto.LastName,
-            Dob = ConvertToDateTime(personDto.Dob),
+            Id = Guid.NewGuid().ToString(),
+            FirstName = person.FirstName,
+            LastName = person.LastName,
+            Dob = person.Dob,
             Address = new Address()
             {
-                Line1 = personDto.Address.Line1,
-                Line2 = personDto.Address.Line2,
-                City = personDto.Address.City,
-                State = personDto.Address.State,
-                ZipCode = personDto.Address.ZipCode
+                Line1 = person.Address.Line1,
+                Line2 = person.Address.Line2,
+                City = person.Address.City,
+                State = person.Address.State,
+                ZipCode = person.Address.ZipCode
             }
         };
-        var response = await _personRepository.AddAsync(person);
+        Console.WriteLine(createdPerson.Id);
+        var response = await _personRepository.AddAsync(createdPerson);
         return DateOnlyResponse(response);
     }
 
-    public async Task<PersonResponseDto> UpdatePersonAsync(Guid id, PersonDto personDto)
+    public async Task<Person> UpdatePersonAsync(string id, Person person)
     {
-        int age = CalculateAge(personDto.Dob);
+        int age = CalculateAge(person.Dob);
         if (age < 0 || age > 150)
         {
             throw new ValidationException("Age must be between 0 and 150.");
         }
+        Console.WriteLine(person.Dob);
         
-        var person = await _personRepository.GetByIdAsync(id);
+        var editedPerson = await _personRepository.GetByIdAsync(id);
+        editedPerson.Id = person.Id;
+        editedPerson.FirstName = person.FirstName;
+        editedPerson.LastName = person.LastName;
+        editedPerson.Dob = editedPerson.Dob;
+        editedPerson.Address.Line1 = person.Address.Line1;
+        editedPerson.Address.Line2 = person.Address.Line2;
+        editedPerson.Address.City = person.Address.City;
+        editedPerson.Address.State = person.Address.State;
+        editedPerson.Address.ZipCode = person.Address.ZipCode;
         
-        person.FirstName = personDto.FirstName;
-        person.LastName = personDto.LastName;
-        person.Dob = ConvertToDateTime(personDto.Dob);
-        person.Address.Line1 = personDto.Address.Line1;
-        person.Address.Line2 = personDto.Address.Line2;
-        person.Address.City = personDto.Address.City;
-        person.Address.State = personDto.Address.State;
-        person.Address.ZipCode = personDto.Address.ZipCode;
-        
-        var response = await _personRepository.UpdateAsync(person);
-        return DateOnlyResponse(response);
+        var response = await _personRepository.UpdateAsync(editedPerson);
+        return response;
     }
 
-    public async Task DeletePersonAsync(Guid id)
+    public async Task DeletePersonAsync(string id)
     {
         var person = await _personRepository.GetByIdAsync(id);
         if (person == null)
@@ -88,10 +90,10 @@ public class PersonService : IPersonService
         await _personRepository.DeleteAsync(person);
     }
     
-    private int CalculateAge(DateOnly dob)
+    private int CalculateAge(DateTime dob)
     {
-        DateOnly currentDate = DateOnly.FromDateTime(DateTime.UtcNow);
-        DateOnly dobDate = dob;
+        DateTime currentDate = DateTime.UtcNow;
+        DateTime dobDate = dob;
     
         int age = currentDate.Year - dobDate.Year;
         if (currentDate < dobDate.AddYears(age))
@@ -101,10 +103,10 @@ public class PersonService : IPersonService
         return age;
     }
 
-    private DateTime ConvertToDateTime(DateOnly dateOnly)
-    {
-        return DateTime.SpecifyKind(dateOnly.ToDateTime(TimeOnly.MinValue).Date, DateTimeKind.Utc);
-    }
+    // private DateTime ConvertToDateTime(DateOnly dateOnly)
+    // {
+    //     return DateTime.SpecifyKind(dateOnly.ToDateTime(TimeOnly.MinValue).Date, DateTimeKind.Utc);
+    // }
 
     private PersonResponseDto DateOnlyResponse(Person person)
     {

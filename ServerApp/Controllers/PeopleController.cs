@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Backend.Interview.Api.ApplicationCore.Contracts;
 using Backend.Interview.Api.ApplicationCore.DTO;
+using Backend.Interview.Api.ApplicationCore.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Interview.Api.ServerApp.Controllers;
@@ -32,8 +33,8 @@ public class PeopleController : ControllerBase
         }
     }
 
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<PersonDto>> GetPersonByIdAsync(Guid id)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<PersonDto>> GetPersonByIdAsync(string id)
     {
         try
         {
@@ -51,12 +52,12 @@ public class PeopleController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddPersonAsync(PersonDto personDto)
+    public async Task<IActionResult> AddPersonAsync(Person person)
     {
         try
         {
-            var person = await _personService.AddPersonAsync(personDto);
-            return Ok(person);
+            var newPerson = await _personService.AddPersonAsync(person);
+            return Ok(newPerson);
         }
         catch (ValidationException ex)
         {
@@ -69,13 +70,13 @@ public class PeopleController : ControllerBase
 
     }
 
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdatePersonAsync(Guid id, PersonDto personDto)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdatePersonAsync(string id, Person person)
     {
         try
         {
-            var person = await _personService.UpdatePersonAsync(id, personDto);
-            return Ok(person);
+            var editedPerson = await _personService.UpdatePersonAsync(id, person);
+            return Ok(editedPerson);
         }
         catch (ValidationException ex)
         {
@@ -91,8 +92,8 @@ public class PeopleController : ControllerBase
         }
     }
 
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> DeletePersonAsync(Guid id)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeletePersonAsync(string id)
     {
         try
         {

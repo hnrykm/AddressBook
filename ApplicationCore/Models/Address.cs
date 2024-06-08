@@ -14,6 +14,6 @@ public class Address
     public string City { get; set; } = string.Empty;
     [MaxLength(30)]
     public string State { get; set; } = string.Empty;
-    [MaxLength(5)]
+    [MaxLength(10)]
     public string ZipCode { get; set; } = string.Empty;
 }

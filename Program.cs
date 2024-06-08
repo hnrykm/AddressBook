@@ -24,6 +24,12 @@ var connectionString = PostgresAzure.Replace("{username}", username)
 builder.Services.AddDbContext<BackendInterviewDbContext>(options => options.UseNpgsql(connectionString));
 builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy => { policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader(); });
+});
+
 builder.Services.AddControllers();
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -43,6 +49,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 

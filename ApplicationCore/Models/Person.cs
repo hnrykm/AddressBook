@@ -3,8 +3,9 @@ using System.ComponentModel.DataAnnotations;
 namespace Backend.Interview.Api.ApplicationCore.Models;
 public class Person
 {
-    [Key]
-    public Guid Id { get; set; }
+    [Key] 
+    [MaxLength(50)]
+    public string Id { get; set; } = string.Empty;
     [MaxLength(30)]
     public string FirstName { get; set; } = string.Empty;
     [MaxLength(30)]
