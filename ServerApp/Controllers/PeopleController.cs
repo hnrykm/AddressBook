@@ -1,6 +1,6 @@
+using System.ComponentModel.DataAnnotations;
 using Backend.Interview.Api.ApplicationCore.Contracts;
 using Backend.Interview.Api.ApplicationCore.DTO;
-using Backend.Interview.Api.ApplicationCore.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Interview.Api.ServerApp.Controllers;
@@ -20,8 +20,16 @@ public class PeopleController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<PersonResponseDto>>> GetAllPeopleAsync()
     {
-        var people = await _personService.GetAllPeopleAsync();
-        return Ok(people);
+        try
+        {
+            var people = await _personService.GetAllPeopleAsync();
+            return Ok(people);
+
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "Internal service error");
+        }
     }
 
     [HttpGet("{id:guid}")]
@@ -36,7 +44,7 @@ public class PeopleController : ControllerBase
         {
             return NotFound(ex.Message);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return StatusCode(500, "Internal server error");        
         }
@@ -45,13 +53,14 @@ public class PeopleController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddPersonAsync(PersonDto personDto)
     {
-        // Data validation
-        // return BadRequest();
         try
         {
             var person = await _personService.AddPersonAsync(personDto);
-            // return CreatedAtAction(nameof(GetPersonByIdAsync), new { id = person.Id }, person);
             return Ok(person);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Message);
         }
         catch (Exception)
         {
@@ -68,11 +77,15 @@ public class PeopleController : ControllerBase
             var person = await _personService.UpdatePersonAsync(id, personDto);
             return Ok(person);
         }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
         catch (ArgumentException ex)
         {
             return NotFound(ex.Message);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return StatusCode(500, "Internal server error");
         }
@@ -90,7 +103,7 @@ public class PeopleController : ControllerBase
         {
             return NotFound(ex.Message);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return StatusCode(500, "Internal server error");
         }

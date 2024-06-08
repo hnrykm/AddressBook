@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Interview.Api.ApplicationCore.Models;
@@ -5,9 +6,14 @@ namespace Backend.Interview.Api.ApplicationCore.Models;
 [Owned]
 public class Address
 {
-    public string Line1 { get; set; }
-    public string? Line2 { get; set; }
-    public string City { get; set; }
-    public string State { get; set; }
-    public string ZipCode { get; set; }
+    [MaxLength(50)] 
+    public string Line1 { get; set; } = string.Empty;
+    [MaxLength(50)]
+    public string? Line2 { get; set; } = string.Empty;
+    [MaxLength(30)]
+    public string City { get; set; } = string.Empty;
+    [MaxLength(30)]
+    public string State { get; set; } = string.Empty;
+    [MaxLength(5)]
+    public string ZipCode { get; set; } = string.Empty;
 }

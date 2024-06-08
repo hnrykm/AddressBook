@@ -1,4 +1,5 @@
 using Backend.Interview.Api.ApplicationCore.Contracts;
+using Backend.Interview.Api.Infrastructure;
 using Backend.Interview.Api.Infrastructure.Data;
 using Backend.Interview.Api.Infrastructure.Repository;
 using Backend.Interview.Api.Infrastructure.Services;

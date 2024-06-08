@@ -5,8 +5,10 @@ public class Person
 {
     [Key]
     public Guid Id { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public DateTime Dob { get; set; } // DateOfBirth instead of Dob?
-    public Address Address { get; set; }
+    [MaxLength(30)]
+    public string FirstName { get; set; } = string.Empty;
+    [MaxLength(30)]
+    public string LastName { get; set; } = string.Empty;
+    public DateTime Dob { get; set; }
+    public Address Address { get; set; } = new Address();
 }

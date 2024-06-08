@@ -21,7 +21,13 @@ public class PersonRepository : IPersonRepository
 
     public async Task<Person> GetByIdAsync(Guid id)
     {
-        return await _dbContext.People.FindAsync(id);
+        var person = await _dbContext.People.FindAsync(id);
+        if (person == null)
+        {
+            throw new ArgumentException($"Person with ID {id} not found.");
+        }
+
+        return person;
     }
 
     public async Task<Person> AddAsync(Person person)
