@@ -30,10 +30,9 @@ public class PersonService : IPersonService
 
     public async Task<PersonResponseDto> AddPersonAsync(Person person)
     {
-        int age = CalculateAge(person.Dob);
-        if (age < 0 || age > 150)
+        if (person.Dob > DateTime.Now)
         {
-            throw new ValidationException("Age must be between 0 and 150.");
+            throw new ValidationException($"Date of birth cannot be before today ({DateOnly.FromDateTime(DateTime.Today)}).");
         }
         var createdPerson = new Person()
         {
@@ -54,27 +53,27 @@ public class PersonService : IPersonService
         return DateOnlyResponse(response);
     }
 
-    public async Task<Person> UpdatePersonAsync(string id, Person person)
+    public async Task<PersonResponseDto> UpdatePersonAsync(string id, PersonResponseDto person)
     {
-        int age = CalculateAge(person.Dob);
-        if (age < 0 || age > 150)
+        
+        var updatedPerson = await _personRepository.GetByIdAsync(id);
+        updatedPerson.Id = person.Id;
+        updatedPerson.FirstName = person.FirstName;
+        updatedPerson.LastName = person.LastName;
+        updatedPerson.Dob = ConvertToDateTime(person.Dob);
+        updatedPerson.Address.Line1 = person.Address.Line1;
+        updatedPerson.Address.Line2 = person.Address.Line2;
+        updatedPerson.Address.City = person.Address.City;
+        updatedPerson.Address.State = person.Address.State;
+        updatedPerson.Address.ZipCode = person.Address.ZipCode;
+
+        if (updatedPerson.Dob > DateTime.Now)
         {
-            throw new ValidationException("Age must be between 0 and 150.");
+            throw new ValidationException($"Date of birth cannot be before today ({DateOnly.FromDateTime(DateTime.Today)}).");
         }
         
-        var editedPerson = await _personRepository.GetByIdAsync(id);
-        editedPerson.Id = person.Id;
-        editedPerson.FirstName = person.FirstName;
-        editedPerson.LastName = person.LastName;
-        editedPerson.Dob = editedPerson.Dob;
-        editedPerson.Address.Line1 = person.Address.Line1;
-        editedPerson.Address.Line2 = person.Address.Line2;
-        editedPerson.Address.City = person.Address.City;
-        editedPerson.Address.State = person.Address.State;
-        editedPerson.Address.ZipCode = person.Address.ZipCode;
-        
-        var response = await _personRepository.UpdateAsync(editedPerson);
-        return response;
+        var response = await _personRepository.UpdateAsync(updatedPerson);
+        return DateOnlyResponse(response);
     }
 
     public async Task DeletePersonAsync(string id)
@@ -82,29 +81,17 @@ public class PersonService : IPersonService
         var person = await _personRepository.GetByIdAsync(id);
         if (person == null)
         {
-            throw new ArgumentException("Person with ID does not exist.");
+            throw new ArgumentException($"Person with ID [{id}] does not exist.");
         }
 
         await _personRepository.DeleteAsync(person);
     }
     
-    private int CalculateAge(DateTime dob)
-    {
-        DateTime currentDate = DateTime.UtcNow;
-        DateTime dobDate = dob;
-    
-        int age = currentDate.Year - dobDate.Year;
-        if (currentDate < dobDate.AddYears(age))
-        {
-            age--;
-        }
-        return age;
-    }
 
-    // private DateTime ConvertToDateTime(DateOnly dateOnly)
-    // {
-    //     return DateTime.SpecifyKind(dateOnly.ToDateTime(TimeOnly.MinValue).Date, DateTimeKind.Utc);
-    // }
+    private DateTime ConvertToDateTime(DateOnly dateOnly)
+    {
+        return DateTime.SpecifyKind(dateOnly.ToDateTime(TimeOnly.MinValue).Date, DateTimeKind.Utc);
+    }
 
     private PersonResponseDto DateOnlyResponse(Person person)
     {

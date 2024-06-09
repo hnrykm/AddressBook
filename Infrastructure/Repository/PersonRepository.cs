@@ -24,7 +24,7 @@ public class PersonRepository : IPersonRepository
         var person = await _dbContext.People.FindAsync(id);
         if (person == null)
         {
-            throw new ArgumentException($"Person with ID {id} not found.");
+            throw new ArgumentException($"Person with ID [{id}] does not exist.");
         }
 
         return person;
@@ -42,7 +42,7 @@ public class PersonRepository : IPersonRepository
     {
         _dbContext.People.Update(person);
         await _dbContext.SaveChangesAsync();
-        
+
         return person;
     }
 

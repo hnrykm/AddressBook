@@ -4,11 +4,15 @@ using Backend.Interview.Api.Infrastructure.Data;
 using Backend.Interview.Api.Infrastructure.Repository;
 using Backend.Interview.Api.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection; // Add this namespace for IServiceCollection
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure user secrets
 builder.Configuration.AddUserSecrets<Program>();
+
+// Bind AppSettings
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
 // Retrieve username and password from user secrets
 var username = builder.Configuration["DbUsername"];
@@ -20,6 +24,9 @@ var connectionString = postgresConnectionStringTemplate.Replace("{username}", us
 
 // Add services to the container.
 ConfigureServices(builder.Services, connectionString);
+
+// Register Logger service
+builder.Services.AddSingleton<Backend.Interview.Api.Infrastructure.Logger.Logger>();
 
 // Build the app
 var app = builder.Build();
@@ -67,4 +74,9 @@ void ConfigureMiddleware(WebApplication app)
     app.UseCors();
     app.UseAuthorization();
     app.MapControllers();
+}
+
+public class AppSettings
+{
+    public string LogPath { get; set; }
 }
