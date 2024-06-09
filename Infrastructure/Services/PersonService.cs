@@ -50,7 +50,6 @@ public class PersonService : IPersonService
                 ZipCode = person.Address.ZipCode
             }
         };
-        Console.WriteLine(createdPerson.Id);
         var response = await _personRepository.AddAsync(createdPerson);
         return DateOnlyResponse(response);
     }
@@ -62,7 +61,6 @@ public class PersonService : IPersonService
         {
             throw new ValidationException("Age must be between 0 and 150.");
         }
-        Console.WriteLine(person.Dob);
         
         var editedPerson = await _personRepository.GetByIdAsync(id);
         editedPerson.Id = person.Id;

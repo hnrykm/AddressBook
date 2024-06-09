@@ -12,10 +12,12 @@ namespace Backend.Interview.Api.ServerApp.Controllers;
 public class PeopleController : ControllerBase
 {
     private readonly IPersonService _personService;
+    private readonly ILogger<PeopleController> _logger;
 
-    public PeopleController(IPersonService personService)
+    public PeopleController(IPersonService personService, ILogger<PeopleController> logger)
     {
         _personService = personService;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -23,6 +25,7 @@ public class PeopleController : ControllerBase
     {
         try
         {
+            _logger.LogInformation("Get all people called");
             var people = await _personService.GetAllPeopleAsync();
             return Ok(people);
 
