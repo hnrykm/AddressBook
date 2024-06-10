@@ -24,7 +24,7 @@ public class PersonService : IPersonService
     public async Task<PersonResponseDto> GetPersonByIdAsync(string id)
     {
         var person = await _personRepository.GetByIdAsync(id);
-
+        Console.WriteLine(person.ToString());
         return DateOnlyResponse(person);
     }
 

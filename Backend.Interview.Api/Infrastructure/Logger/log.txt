@@ -27,3 +27,6 @@
 6/9/2024 12:25:34 AM : 200 Ok | Person with ID [326e997b-0561-4cbe-b1c2-b11810a4f0f9] updated.
 6/9/2024 12:26:19 AM : 400 Bad Request | Date of birth cannot be before today (6/9/2024).
 6/9/2024 5:13:31 PM : 200 Ok | Person with ID [dd5b08f5-0bbf-45b6-9484-526e34fa655e] updated.
+6/9/2024 11:33:52 PM : 404 Not Found | Person with ID [67f4f3f0-e8f8-4d97-bc06-dd61ef08b2d2] does not exist.
+6/9/2024 11:34:22 PM : 404 Not Found | Person with ID [67f4f3f0-e8f8-4d97-bc06-dd61ef08b2d2] does not exist.
+6/9/2024 11:34:43 PM : 404 Not Found | Person with ID [67f4f3f0-e8f8-4d97-bc06-dd61ef08b2d2] does not exist.
