@@ -13,9 +13,9 @@ namespace Backend.Interview.Api.ServerApp.Controllers;
 public class PeopleController : ControllerBase
 {
     private readonly IPersonService _personService;
-    private readonly Logger _logger;
+    private readonly ICustomLogger _logger;
 
-    public PeopleController(IPersonService personService, Logger logger)
+    public PeopleController(IPersonService personService, ICustomLogger logger)
     {
         _personService = personService;
         _logger = logger;

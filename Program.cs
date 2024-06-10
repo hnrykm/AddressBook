@@ -26,7 +26,7 @@ var connectionString = postgresConnectionStringTemplate.Replace("{username}", us
 ConfigureServices(builder.Services, connectionString);
 
 // Register Logger service
-builder.Services.AddSingleton<Backend.Interview.Api.Infrastructure.Logger.Logger>();
+builder.Services.AddSingleton<Backend.Interview.Api.Infrastructure.Logger.CustomLogger>();
 
 // Build the app
 var app = builder.Build();

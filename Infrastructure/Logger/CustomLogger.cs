@@ -1,12 +1,13 @@
+using Backend.Interview.Api.ApplicationCore.Contracts;
 using Microsoft.Extensions.Options;
 
 namespace Backend.Interview.Api.Infrastructure.Logger;
 
-public class Logger
+public class CustomLogger : ICustomLogger
 {
     private readonly AppSettings _appSettings;
 
-    public Logger(IOptions<AppSettings> appSettings)
+    public CustomLogger(IOptions<AppSettings> appSettings)
     {
         _appSettings = appSettings.Value;
     }

@@ -7,6 +7,6 @@ public class PersonResponseDto
         public string Id { get; set; } = String.Empty;
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
-        public DateOnly Dob { get; set; } = DateOnly.MaxValue;
+        public DateOnly Dob { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         public Address Address { get; set; } = new Address();
 }
