@@ -5,7 +5,6 @@ using Backend.Interview.Api.Infrastructure.Logger;
 using Backend.Interview.Api.Infrastructure.Repository;
 using Backend.Interview.Api.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection; // Add this namespace for IServiceCollection
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,9 +25,6 @@ var connectionString = postgresConnectionStringTemplate.Replace("{username}", us
 // Add services to the container.
 ConfigureServices(builder.Services, connectionString);
 
-// Register Logger service
-builder.Services.AddSingleton<Backend.Interview.Api.Infrastructure.Logger.CustomLogger>();
-
 // Build the app
 var app = builder.Build();
 
@@ -40,7 +36,7 @@ app.Run();
 void ConfigureServices(IServiceCollection services, string connectionString)
 {
     services.AddDbContext<BackendInterviewDbContext>(options => options.UseNpgsql(connectionString));
-
+    
     services.AddScoped<IPersonService, PersonService>();
     services.AddScoped<IPersonRepository, PersonRepository>();
     services.AddScoped<ICustomLogger, CustomLogger>();

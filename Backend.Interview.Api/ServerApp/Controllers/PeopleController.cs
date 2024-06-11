@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using Backend.Interview.Api.ApplicationCore.Contracts;
 using Backend.Interview.Api.ApplicationCore.DTO;
 using Backend.Interview.Api.ApplicationCore.Models;
-using Backend.Interview.Api.Infrastructure.Logger;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Interview.Api.ServerApp.Controllers;
@@ -125,6 +124,52 @@ public class PeopleController : ControllerBase
             return StatusCode(500, "Internal server error");
         }
     }
-    
-    
+
+    // [HttpPost("seed")]
+    // public async Task<IActionResult> AddPeopleFromSeedDataAsync(string peopleJson)
+    // {
+    //     try
+    //     {
+    //             var data = JsonSerializer.Deserialize<List<PersonDobStringDto>>(peopleJson);
+    //         foreach (var person in data.people)
+    //         {
+    //
+    //             Console.WriteLine(person.ToString());
+    //             var deserializedPerson = new Person()
+    //             {
+    //                 Id = person.Id,
+    //                 FirstName = person.FirstName,
+    //                 LastName = person.LastName,
+    //                 Dob = ParseDateString(person.Dob),
+    //                 Address = new Address()
+    //                 {
+    //                     Line1 = person.Address.Line1,
+    //                     Line2 = person.Address.Line2,
+    //                     City = person.Address.City,
+    //                     State = person.Address.State,
+    //                     ZipCode = person.Address.ZipCode
+    //                 }
+    //             };
+    //             await _personService.AddPersonAsync(deserializedPerson);
+    //         }
+    //
+    //         _logger.WriteLog($"Seed data added successfully.");
+    //         return Ok("Seed data added successfully.");
+    //     }
+    //     catch (ValidationException ex)
+    //     {
+    //         _logger.WriteLog($"400 Bad Request | {ex.Message}");
+    //         return BadRequest(ex.Message);
+    //     }
+    //     catch (Exception)
+    //     {
+    //         _logger.WriteLog($"500 Internal Server Error | Unexpected error adding seed data.");
+    //         return StatusCode(500, "Internal server error");
+    //     }
+    //     
+    //     DateTime ParseDateString(string personDob)
+    //     {
+    //         return DateTime.TryParseExact(personDob, "MM-dd-yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime result) ? result : DateTime.Now;
+    //     }
+    // }
 }
