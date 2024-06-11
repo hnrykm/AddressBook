@@ -1,6 +1,7 @@
 using Backend.Interview.Api.ApplicationCore.Contracts;
 using Backend.Interview.Api.Infrastructure;
 using Backend.Interview.Api.Infrastructure.Data;
+using Backend.Interview.Api.Infrastructure.Logger;
 using Backend.Interview.Api.Infrastructure.Repository;
 using Backend.Interview.Api.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +43,7 @@ void ConfigureServices(IServiceCollection services, string connectionString)
 
     services.AddScoped<IPersonService, PersonService>();
     services.AddScoped<IPersonRepository, PersonRepository>();
+    services.AddScoped<ICustomLogger, CustomLogger>();
 
     services.AddCors(options =>
     {

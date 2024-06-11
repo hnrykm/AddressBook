@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using Backend.Interview.Api.ApplicationCore.Contracts;
 using Backend.Interview.Api.ApplicationCore.DTO;
 using Backend.Interview.Api.ApplicationCore.Models;
-using Backend.Interview.Api.Infrastructure.Logger;
 using Backend.Interview.Api.ServerApp.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
